@@ -230,9 +230,10 @@ QnA / 공지사항
 
 ## 📡 핵심 API 명세서
 
-### 1️⃣ 센서 데이터 API
+<details>
+<summary><b>📌 센서 데이터 API</b></summary>
 
-#### 📌 전체 센서 데이터 조회
+### 전체 센서 데이터 조회
 ```http
 GET /api/growings/list
 
@@ -249,7 +250,7 @@ Response: 200 OK
 ]
 ```
 
-#### 📌 7일간 센서 데이터 조회
+### 7일간 센서 데이터 조회
 ```http
 GET /api/growings/weekly
 
@@ -266,7 +267,7 @@ Response: 200 OK
 ]
 ```
 
-#### 📌 최신 자동제어장치 작동 횟수 조회
+### 최신 자동제어장치 작동 횟수 조회
 ```http
 GET /api/motions/latest
 
@@ -280,11 +281,12 @@ Response: 200 OK
 }
 ```
 
----
+</details>
 
-### 2️⃣ WebSocket 실시간 알림 API
+<details>
+<summary><b>📌 WebSocket 실시간 알림 API</b></summary>
 
-#### 📌 관리자 알림 구독 (환경문의 발생 시)
+### 관리자 알림 구독 (환경문의 발생 시)
 ```http
 STOMP SUBSCRIBE /topic/admin
 
@@ -296,14 +298,14 @@ Message:
 }
 ```
 
-#### 📌 사용자 알림 구독 (답변 등록 시)
+### 사용자 알림 구독 (답변 등록 시)
 ```http
 STOMP SUBSCRIBE /topic/user/{userId}
 
 Message: "답변이 등록되었습니다."
 ```
 
-#### 📌 환경문의 등록 (관리자에게 알림 전송)
+### 환경문의 등록 (관리자에게 알림 전송)
 ```http
 POST /questions
 
@@ -324,7 +326,7 @@ Response: 201 Created
 → /topic/admin 으로 실시간 알림 전송
 ```
 
-#### 📌 답변 등록 (사용자에게 알림 전송)
+### 답변 등록 (사용자에게 알림 전송)
 ```http
 POST /answers
 
@@ -341,13 +343,16 @@ Response: 201 Created
 → /topic/user/{userId} 로 "답변이 등록되었습니다." 메시지 전송
 ```
 
+</details>
+
 ---
 
 ## 💡 핵심 구현 코드
 
-### 1️⃣ Enum으로 코드량 50% 감소
+<details>
+<summary><b>1️⃣ Enum으로 코드량 50% 감소</b></summary>
 
-#### 📄 UploadPath Enum
+### UploadPath Enum
 ```java
 public enum UploadPath {
     QUESTION("question"),  // Question 이미지 업로드 경로
@@ -371,11 +376,12 @@ public enum UploadPath {
 - 유지보수성 및 확장성 향상
 - 새로운 업로드 타입 추가 시 Enum만 수정
 
----
+</details>
 
-### 2️⃣ 범용적 api 설계
+<details>
+<summary><b>2️⃣ 범용적 API 설계</b></summary>
 
-#### 📄 재사용성을 고려한 API 설계
+### 재사용성을 고려한 API 설계
 ```xml
 <!-- 오늘 제어 횟수 조회 -->
 <select id="getTodayDeviceStatus" resultMap="deviceStatus">
@@ -390,7 +396,6 @@ public enum UploadPath {
     ORDER BY TIMESTAMP DESC;
 </select>
 ```
-
 ```java
 // 오늘 제어 횟수 조회
 @GetMapping("/today")
@@ -413,11 +418,12 @@ public ResponseEntity<?> getTodayDeviceStatus(){
 - API 구조 최적화
 - 3차 개발까지 안정적 사용
 
----
+</details>
 
-### 3️⃣ Spring WebSocket 실시간 통신
+<details>
+<summary><b>3️⃣ Spring WebSocket 실시간 통신</b></summary>
 
-#### 📄 WebSocket Configuration
+### WebSocket Configuration
 ```java
 @Configuration
 @EnableWebSocketMessageBroker  // WebSocket 메시지 브로커 활성화
@@ -439,7 +445,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 }
 ```
 
-#### 📄 실시간 알림 Controller
+### 실시간 알림 Controller
 ```java
 @Controller
 @RequiredArgsConstructor
@@ -472,9 +478,17 @@ public class NotificationController {
 - 새로고침 없이 실시간 업데이트
 - QnA 질문 등록 시 관리자에게 즉시 알림
 
+</details>
+
 ---
 
 ## 📂 프로젝트 구조
+
+### ⚙️ 백엔드
+
+<details>
+<summary><b>프로젝트 구조 보기</b></summary>
+   
 ```
 src/
 ├── main/
@@ -482,14 +496,22 @@ src/
 │   │   └── com.green.backend_root/
 │   │       ├── answer/                  # QnA 답변 관리
 │   │       │   ├── controller/
+│   │       │   │   └── AnswerController.java
 │   │       │   ├── service/
+│   │       │   │   └── AnswerService.java
 │   │       │   ├── dto/
+│   │       │   │   └── AnswerDTO.java
 │   │       │   └── mapper/
+│   │       │       └── AnswerMapper.java
 │   │       ├── application/             # 신청자 관리
 │   │       │   ├── controller/
+│   │       │   │   └── ApplicationController.java
 │   │       │   ├── service/
+│   │       │   │   └── ApplicationService.java
 │   │       │   ├── dto/
+│   │       │   │   └── ApplicationDTO.java
 │   │       │   └── mapper/
+│   │       │       └── ApplicationMapper.java
 │   │       ├── common/                  # 공통 기능
 │   │       │   └── NotificationController.java
 │   │       ├── config/                  # 설정 파일
@@ -501,23 +523,38 @@ src/
 │   │       │   └── VisitorService.java
 │   │       ├── email/                   # 이메일 발송
 │   │       │   ├── controller/
+│   │       │   │   └── EmailController.java
 │   │       │   ├── service/
+│   │       │   │   └── EmailService.java
 │   │       │   └── dto/
+│   │       │       └── EmailDTO.java
 │   │       ├── growing/                 # 환경 데이터
 │   │       │   ├── controller/
+│   │       │   │   └── GrowingController.java
 │   │       │   ├── service/
+│   │       │   │   └── GrowingService.java
 │   │       │   ├── dto/
+│   │       │   │   └── GrowingDTO.java
 │   │       │   └── mapper/
+│   │       │       └── GrowingMapper.java
 │   │       ├── motionBuzzer/            # 자동 제어 장치 작동 횟수
 │   │       │   ├── controller/
+│   │       │   │   └── MotionBuzzerController.java
 │   │       │   ├── service/
+│   │       │   │   └── MotionBuzzerService.java
 │   │       │   ├── dto/
+│   │       │   │   └── MotionBuzzerDTO.java
 │   │       │   └── mapper/
+│   │       │       └── MotionBuzzerMapper.java
 │   │       ├── notice/                  # 공지사항
 │   │       │   ├── controller/
+│   │       │   │   └── NoticeController.java
 │   │       │   ├── service/
+│   │       │   │   └── NoticeService.java
 │   │       │   ├── dto/
+│   │       │   │   └── NoticeDTO.java
 │   │       │   └── mapper/
+│   │       │       └── NoticeMapper.java
 │   │       ├── plantBot/                # 식물 챗봇 (AI)
 │   │       │   ├── ChatController.java
 │   │       │   ├── ChatMessage.java
@@ -525,19 +562,31 @@ src/
 │   │       │   └── PlantService.java
 │   │       ├── question/                # QnA 질문
 │   │       │   ├── controller/
+│   │       │   │   └── QuestionController.java
 │   │       │   ├── service/
+│   │       │   │   └── QuestionService.java
 │   │       │   ├── dto/
+│   │       │   │   └── QuestionDTO.java
 │   │       │   └── mapper/
+│   │       │       └── QuestionMapper.java
 │   │       ├── schedule/                # 일정 관리
 │   │       │   ├── controller/
+│   │       │   │   └── ScheduleController.java
 │   │       │   ├── service/
+│   │       │   │   └── ScheduleService.java
 │   │       │   ├── dto/
+│   │       │   │   └── ScheduleDTO.java
 │   │       │   └── mapper/
+│   │       │       └── ScheduleMapper.java
 │   │       ├── user/                    # 사용자 관리
 │   │       │   ├── controller/
+│   │       │   │   └── UserController.java
 │   │       │   ├── service/
+│   │       │   │   └── UserService.java
 │   │       │   ├── dto/
+│   │       │   │   └── UserDTO.java
 │   │       │   └── mapper/
+│   │       │       └── UserMapper.java
 │   │       ├── util/                    # 유틸리티
 │   │       │   ├── FileUploadUtil.java
 │   │       │   ├── QuestionFileUploadUtil.java
@@ -564,6 +613,146 @@ src/
 └── test/
     └── java/
 ```
+
+</details>
+
+### 🎨 프론트엔드
+
+<details>
+<summary><b>프로젝트 구조 보기</b></summary>
+   
+```
+src/
+├── assets/                          # 정적 에셋
+│   └── react.svg
+│
+├── common/                          # 공통 컴포넌트
+│   ├── Accordion.jsx
+│   ├── Accordion.module.css
+│   ├── Button.jsx
+│   ├── Button.module.css
+│   ├── Input.jsx
+│   ├── Input.module.css
+│   ├── Modal.jsx
+│   ├── Modal.module.css
+│   ├── Select.jsx
+│   ├── Select.module.css
+│   ├── Textarea.jsx
+│   └── Textarea.module.css
+│
+├── component/                       # 재사용 컴포넌트
+│   ├── adminMenu/                   # 관리자 메뉴
+│   │   ├── AdminMenu.jsx
+│   │   └── AdminMenu.module.css
+│   ├── calendar/                    # 캘린더 관련
+│   │   ├── ScheduleModal.jsx
+│   │   └── ScheduleModal.module.css
+│   ├── charts/                      # 차트 컴포넌트
+│   │   ├── BubbleChart.jsx
+│   │   ├── DoughnutChart.jsx
+│   │   ├── GaugeChart.jsx
+│   │   ├── LineChart.jsx
+│   │   ├── RadarChart.jsx
+│   │   └── VerticalBarChart.jsx
+│   ├── modal/                       # 모달
+│   │   ├── Modal.jsx
+│   │   └── Modal.module.css
+│   ├── pagination/                  # 페이지네이션
+│   │   ├── Pagination.jsx
+│   │   └── Pagination.module.css
+│   └── widgets/                     # 위젯
+│       ├── ForecastWidget.jsx
+│       ├── ForecastWidget.module.css
+│       ├── WeatherWidget.jsx
+│       └── WeatherWidget.module.css
+│
+├── constants/                       # 상수 정의
+│   └── webConst.js
+│
+├── hooks/                           # 커스텀 훅
+│   ├── useAgreements.js
+│   └── useWebSocket.js
+│
+├── layout/                          # 레이아웃
+│   ├── main/                        # 메인 레이아웃
+│   │   ├── MainFooter.jsx
+│   │   ├── MainFooter.module.css
+│   │   ├── MainHeader.jsx
+│   │   ├── MainHeader.module.css
+│   │   ├── MainLayout.jsx
+│   │   └── MainLayout.module.css
+│   └── mypage/                      # 마이페이지 레이아웃
+│       ├── MyPageLayout.jsx
+│       ├── MyPageLayout.module.css
+│       ├── MyPageMenu.jsx
+│       └── MyPageMenu.module.css
+│
+├── pages/                           # 페이지 컴포넌트
+│   ├── admin/                       # 관리자 페이지
+│   │   ├── AdminHome.jsx            # 관리자 대시보드
+│   │   ├── AdminHome.module.css
+│   │   ├── AdminQnA.jsx             # QnA 목록
+│   │   ├── AdminQnA.module.css
+│   │   ├── AdminQnADetail.jsx       # QnA 상세
+│   │   ├── AdminQnADetail.module.css
+│   │   ├── ManageService.jsx        # 서비스 신청 관리
+│   │   ├── ManageService.module.css
+│   │   ├── ManageUser.jsx           # 회원 관리
+│   │   ├── ManageUser.module.css
+│   │   ├── Notice.jsx               # 공지사항 목록
+│   │   ├── Notice.module.css
+│   │   ├── NoticeDetail.jsx         # 공지사항 상세
+│   │   ├── NoticeDetail.module.css
+│   │   ├── RegNotice.jsx            # 공지사항 등록
+│   │   └── RegNotice.module.css
+│   ├── main/                        # 메인 페이지
+│   │   ├── Home.jsx
+│   │   └── Home.module.css
+│   ├── menu/                        # 메뉴 페이지
+│   │   ├── CompanyProfile.jsx       # 회사 소개
+│   │   ├── CompanyProfile.module.css
+│   │   ├── CustomerService.jsx      # 고객 센터
+│   │   ├── CustomerService.module.css
+│   │   ├── PlantChatbot.jsx         # 식물 챗봇
+│   │   ├── PlantChatbot.module.css
+│   │   ├── RegService.jsx           # 서비스 신청
+│   │   └── RegService.module.css
+│   └── user/                        # 사용자 페이지
+│       ├── EmailAuth.jsx            # 이메일 인증
+│       ├── EmailAuth.module.css
+│       ├── HumDetail.jsx            # 습도 상세
+│       ├── HumDetail.module.css
+│       ├── IllumDetail.jsx          # 조도 상세
+│       ├── IllumDetail.module.css
+│       ├── Join.jsx                 # 회원가입
+│       ├── Join.module.css
+│       ├── Login.jsx                # 로그인
+│       ├── Login.module.css
+│       ├── SoilHumDetail.jsx        # 토양습도 상세
+│       ├── SoilHumDetail.module.css
+│       ├── TempDetail.jsx           # 온도 상세
+│       ├── TempDetail.module.css
+│       ├── UserControl.jsx          # 제어 장치 기록
+│       ├── UserControl.module.css
+│       ├── UserInfo.jsx             # 회원 정보
+│       ├── UserInfo.module.css
+│       ├── UserQnA.jsx              # QnA 목록
+│       ├── UserQnA.module.css
+│       ├── UserQnADetail.jsx        # QnA 상세
+│       ├── UserQnADetail.module.css
+│       ├── UserQnAUpdate.jsx        # QnA 수정
+│       └── UserQnAUpdate.module.css
+│
+├── utils/                           # 유틸리티
+│   └── validation.jsx               # 유효성 검사
+│
+├── App.jsx                          # 메인 앱
+├── App.css
+├── main.jsx                         # 진입점
+└── index.css                        # 글로벌 스타일
+```
+
+</details>
 
 ---
 

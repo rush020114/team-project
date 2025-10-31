@@ -480,86 +480,89 @@ src/
 ├── main/
 │   ├── java/
 │   │   └── com.green.backend_root/
-│   │       ├── answer/                  # QnA 답변
+│   │       ├── answer/                  # QnA 답변 관리
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
-│   │       ├── application/             # 회원 상품 (MEM 프로젝트)
+│   │       ├── application/             # 신청자 관리
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
+│   │       ├── common/                  # 공통 기능
+│   │       │   └── NotificationController.java
 │   │       ├── config/                  # 설정 파일
 │   │       │   ├── WebConfig.java
 │   │       │   └── WebSocketConfig.java
-│   │       │
-│   │       ├── email/                   # 이메일 인증
+│   │       ├── counter/                 # 방문자 카운터 (Redis)
+│   │       │   ├── RedisConfig.java
+│   │       │   ├── VisitorController.java
+│   │       │   └── VisitorService.java
+│   │       ├── email/                   # 이메일 발송
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   └── dto/
-│   │       │
-│   │       ├── growing/                 # 센서 환경 데이터
+│   │       ├── growing/                 # 환경 데이터
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
-│   │       ├── motionBuzzer/            # 자동제어장치 작동 기록
+│   │       ├── motionBuzzer/            # 자동 제어 장치 작동 횟수
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
 │   │       ├── notice/                  # 공지사항
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
+│   │       ├── plantBot/                # 식물 챗봇 (AI)
+│   │       │   ├── ChatController.java
+│   │       │   ├── ChatMessage.java
+│   │       │   ├── ChatService.java
+│   │       │   └── PlantService.java
 │   │       ├── question/                # QnA 질문
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
 │   │       ├── schedule/                # 일정 관리
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
-│   │       ├── user/                    # 회원 관리
+│   │       ├── user/                    # 사용자 관리
 │   │       │   ├── controller/
 │   │       │   ├── service/
 │   │       │   ├── dto/
 │   │       │   └── mapper/
-│   │       │
 │   │       ├── util/                    # 유틸리티
 │   │       │   ├── FileUploadUtil.java
 │   │       │   ├── QuestionFileUploadUtil.java
-│   │       │   └── UploadPath.java (Enum)
-│   │       │
-│   │       └── common/                  # 공통 기능
-│   │           └── NotificationController.java
-│   │
+│   │       │   └── UploadPath.java
+│   │       └── BackendRootApplication.java  # 메인 애플리케이션
 │   └── resources/
-│       ├── mapper/                      # MyBatis XML
+│       ├── mapper/                      # MyBatis XML 매퍼
+│       │   ├── answer-mapper.xml
+│       │   ├── application-mapper.xml
 │       │   ├── growing-mapper.xml
 │       │   ├── motion-mapper.xml
-│       │   ├── user-mapper.xml
 │       │   ├── notice-mapper.xml
 │       │   ├── question-mapper.xml
-│       │   ├── answer-mapper.xml
 │       │   ├── schedule-mapper.xml
-│       │   └── application-mapper.xml
-│       │
+│       │   └── user-mapper.xml
 │       ├── static/
-│       │   └── upload_files/            # 업로드 파일 저장
-│       │
-│       └── application.properties       # 애플리케이션 설정
+│       │   └── upload_files/            # 업로드된 파일
+│       │       ├── notice/
+│       │       └── question/
+│       ├── templates/
+│       ├── application.properties       # 애플리케이션 설정
+│       ├── log4jdbc.log4j2.properties  
+│       └── logback.xml                 
+└── test/
+    └── java/
 ```
 
 ---
